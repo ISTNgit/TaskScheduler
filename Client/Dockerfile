@@ -1,5 +1,5 @@
 FROM python:3
 
-ADD client.py /
+ADD Client/client.py /
 
 CMD ["python", "./client.py" ]
