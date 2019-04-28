@@ -1,0 +1,48 @@
+version: '3.5'
+
+services:
+  database:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: idp
+    networks:
+      - db_network
+    volumes:
+      - ./dbInit:/docker-entrypoint-initdb.d/:ro
+
+  server:
+    build: ./Server
+    ports:
+      - 59001:59001
+    networks:
+      - client_network
+      - db_network
+    links:
+      - database
+    depends_on:
+      - database
+    volumes:
+      - ./Server:/app
+      
+  client:
+    build: ./Client
+    stdin_open: true
+    tty: true
+    links:
+      - server
+    depends_on:
+      - server
+    ports:
+      - 59000:59000
+    networks:
+      - client_network
+    volumes:
+      - ./Client:/app
+  
+networks:
+  client_network:
+  db_network:

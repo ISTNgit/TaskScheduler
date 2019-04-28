@@ -1,0 +1,6 @@
+CREATE TABLE records (
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
+  phone VARCHAR(20),
+  task_date DATE,
+  task VARCHAR(50)
+);
